@@ -19,8 +19,10 @@ def get(url):
     request = urllib2.Request(url) 
     request.add_header('Connection', 'close') 
     response = urllib2.urlopen(request)
+    content-length = response.info().getheader('Content-Length')
+    global contentlength
     return response
-
+
 searchinput = raw_input('应用名:')
 
 searchurl = 'http://coolapk.com/apk/search/?q='+searchinput
@@ -52,8 +54,7 @@ apkpage = get(apkurl).read()
 
 name8version = re.findall(r'<h1 class="media-heading ex-apk-view-title">(.*?)<small>(\S+)</small></h1>', apkpage)
 
-developer = re.findall(r'<dt>开发者：</dt><dd>(.*?)</dd>', apkpage)
-
+developer = re.findall(r'<dt>开发者：</dt><dd>(.*?)</dd>', apkpage)
 print('应用名称:'+name8version[0][0],'版本:'+name8version[0][1],'包名:'+packname[0],'开发者:'+developer[0])
 
 basicinfo = re.findall(r'<span class="pull-left hidden-sm hidden-xs">(\S+)</span><span>(.*?)</span>', apkpage)
@@ -113,6 +114,8 @@ else:
     print('没有权限 ...')
 if raw_input('下载?(Y/n)') != 'n':
     print("下载中...")
+    get(downloadurl+'&extra=0')
+    print('共'+str(int(contentlength/1048576)+'MB')
     with open(packname[0]+'_'+name8version[0][1]+'.apk','wb') as file:
         file.write(get(downloadurl+'&extra=0').read())
     print("搞定,收工!")
