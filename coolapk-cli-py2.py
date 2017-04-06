@@ -20,7 +20,7 @@ def get(url):
     request.add_header('Connection', 'close') 
     response = urllib2.urlopen(request)
     return response
-
+
 searchinput = raw_input('应用名:')
 
 searchurl = 'http://coolapk.com/apk/search/?q='+searchinput
@@ -52,7 +52,8 @@ apkpage = get(apkurl).read()
 
 name8version = re.findall(r'<h1 class="media-heading ex-apk-view-title">(.*?)<small>(\S+)</small></h1>', apkpage)
 
-developer = re.findall(r'<dt>开发者：</dt><dd>(.*?)</dd>', apkpage)
+developer = re.findall(r'<dt>开发者：</dt><dd>(.*?)</dd>', apkpage)
+
 print('应用名称:'+name8version[0][0],'版本:'+name8version[0][1],'包名:'+packname[0],'开发者:'+developer[0])
 
 basicinfo = re.findall(r'<span class="pull-left hidden-sm hidden-xs">(\S+)</span><span>(.*?)</span>', apkpage)
